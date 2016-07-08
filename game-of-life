@@ -1,18 +1,22 @@
+
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
 #ifdef __AVR__
 #endif
 #define PIN            6
-#define NUMPIXELS      40
+#define NUMPIXELS      40 //Anzahl aller Pixel
+#define Height         5  //Höhe des Spielfeldes 
+#define Width          8  //Breite des Spielfeldes 
+
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
-int delayval = 100; 
-int Pixels [40];
-int Leben [40];
+int Pixels [NUMPIXELS];
+int Leben [NUMPIXELS]; 
+int lastPixel = NUMPIXELS -1;
 
 void setup() {
-  
- Pixels[4] = 1;
+
+   Pixels[4] = 1;
    Pixels[5] = 1;
    Pixels[6] = 1;
    Pixels[11] = 1;
@@ -24,22 +28,23 @@ void setup() {
    Pixels[37] = 1;
    Pixels[38] = 1;
    Pixels[36] = 1;
-  
-/*
+  /*
+
   Pixels[11] = 1;
   Pixels[19] = 1;
   Pixels[27] = 1;
   Pixels[18] = 1;
   Pixels[20] = 1;
- */
 
-  /* 
+
+     */
+     /*
    Pixels[15] = 1;
    Pixels[23] = 1;
    Pixels[31] = 1;
    */
-  Serial.begin(9600);
-  pinMode(PIN, OUTPUT);
+  //Serial.begin(9600);
+  //pinMode(PIN, OUTPUT);
   pixels.begin();
 };
 
@@ -48,7 +53,7 @@ void setup() {
 
 int Nachbar(int n){
   int Nachbar = 0;
-  if (n == 32){ //öffnet if Ecke links unten
+  if (n == NUMPIXELS - Width){ //öffnet if Ecke links unten
     if (Pixels[n - 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -69,7 +74,7 @@ int Nachbar(int n){
 
 
 
-  if (n == 39){ //öffnet if Ecke rechts unten
+  if (n == lastPixel){ //öffnet if Ecke rechts unten
     if (Pixels[n - 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -92,7 +97,7 @@ int Nachbar(int n){
   
   
   
-  if (n == 7){ //öffnet if Ecke rechts oben
+  if (n == 0 + Width - 1){ //öffnet if Ecke rechts oben
     if (Pixels[n + 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -140,8 +145,9 @@ int Nachbar(int n){
   
   
   
-  if ((32<n)&&(n<39)){ //öffnet if untere Reihe  
-    if (Pixels[n + 1] == 1){
+  //if ((32<n)&&(n<39)){ //öffnet if untere Reihe  
+  if ((NUMPIXELS - Width<n)&&(n<lastPixel)){
+  if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
       //Serial.println(". Zelle. Rechts. ");
@@ -174,7 +180,7 @@ int Nachbar(int n){
   
   
   
-  if ((0<n)&&(n<7)){ //öffnet if obere Reihe 
+  if ((0<n)&&(n<0+Width-1)){ //öffnet if obere Reihe 
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -208,8 +214,8 @@ int Nachbar(int n){
   
   
   
-  //if (n % 8 == 0){ //öffnet if links
-  if ((n== 8)||(n==16)||(n==24)){
+  if (n % 8 == 0){ //öffnet if links
+  //if ((n== 8)||(n==16)||(n==24)){
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -244,8 +250,8 @@ int Nachbar(int n){
   
   
   
-  //if (n % 8 == 7){ //öffnet if rechts
-  if ((n==15)||(n==23)||(n==31)){
+  if (n % 8 == 7){ //öffnet if rechts
+  //if ((n==15)||(n==23)||(n==31)){
     if (Pixels[n - 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -334,10 +340,10 @@ void loop() {
 
   for(int i=0;i<NUMPIXELS;i++){
     if (Pixels[i] == 0){ 
-      pixels.setPixelColor(i, pixels.Color(1,0,0));
+      pixels.setPixelColor(i, pixels.Color(10,3,0));
     }//schließt if 
     if (Pixels[i] == 1 ){
-      pixels.setPixelColor(i, pixels.Color(0,0,5)); 
+      pixels.setPixelColor(i, pixels.Color(0,0,15)); 
     }//schließt if
     
     
