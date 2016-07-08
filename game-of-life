@@ -15,6 +15,7 @@ int Leben [NUMPIXELS];
 int lastPixel = NUMPIXELS -1;
 long randNumber1;
 long randNumber2;
+
 long randNumber3;
 long randNumber4;
 long randNumber5;
@@ -24,27 +25,14 @@ long randNumber8;
 long randNumber9;
 
 
+
 void setup() {
     randomSeed(analogRead(0));
     randNumber1 = random(NUMPIXELS);
-    randNumber2 = random(NUMPIXELS);
-    randNumber3 = random(NUMPIXELS);
-    randNumber4 = random(NUMPIXELS);
-    randNumber5 = random(NUMPIXELS);
-    randNumber6 = random(NUMPIXELS);
-    randNumber7 = random(NUMPIXELS);
-    randNumber8 = random(NUMPIXELS);
-    randNumber9 = random(NUMPIXELS);
-    
+
     Pixels[randNumber1] = 1;
-    Pixels[randNumber2] = 1;
-    Pixels[randNumber3] = 1;
-    Pixels[randNumber4] = 1;
-    Pixels[randNumber5] = 1;
-    Pixels[randNumber6] = 1;
-    Pixels[randNumber7] = 1;
-    Pixels[randNumber8] = 1;
-    Pixels[randNumber9] = 1;
+
+    
     
 /*
    Pixels[4] = 1;
@@ -75,7 +63,7 @@ void setup() {
    Pixels[23] = 1;
    Pixels[31] = 1;
    */
-  //Serial.begin(9600);
+  Serial.begin(9600);
   //pinMode(PIN, OUTPUT);
   pixels.begin();
 };
@@ -369,12 +357,18 @@ int Nachbar(int n){
 
 
 void loop() {
-
+  
+  int lebendePixel = 0;
+  
   for(int i=0;i<NUMPIXELS;i++){
+    
+    
+
     if (Pixels[i] == 0){ 
       pixels.setPixelColor(i, pixels.Color(10,3,0));
     }//schließt if 
     if (Pixels[i] == 1 ){
+           lebendePixel = lebendePixel + 1;
       pixels.setPixelColor(i, pixels.Color(0,0,15)); 
     }//schließt if
     
@@ -383,8 +377,7 @@ void loop() {
     int anzahlLebenderPixel; 
     anzahlLebenderPixel = Nachbar(i);
     
-    
-    
+
     if ((anzahlLebenderPixel < 2)|| (anzahlLebenderPixel > 3)){
       //Pixels[i] = 0;
       Leben[i] = 0;
@@ -396,12 +389,8 @@ void loop() {
     if (anzahlLebenderPixel == 2){
       //Pixels[i] = 1;
       Leben[i] = 2;
-    }//schließt if 
-  }//schließt for(int 
-  
-  
-  
-  
+    }//schließt if
+  }//schließt for(int
   
   for(int i=0;i<NUMPIXELS;i++){
     if (Leben[i] == 0){
@@ -409,25 +398,32 @@ void loop() {
     }
     if (Leben[i] == 1){
       Pixels[i] = 1;
+      
     } 
     if (Leben[i] == 2){
 
-    } 
+    }
+      Serial.println (lebendePixel);
   }//schließt for(int 
+ 
+  
   pixels.show();
-  delay (100);
-  
-  
-  
-  if (allPixels == 0){
-   software_Reset(); 
-  }
+  delay (300); 
 
+if (lebendePixel == 0){
+  delay (1000);
+software_Reset();
+}
 }//schließt den loop
-
-void software_Reset() 
+ void software_Reset() 
 {
 asm volatile ("  jmp 0");  
 }  
+
+
+  
+  
+
+
 
 
