@@ -14,26 +14,18 @@ int Pixels [NUMPIXELS];
 int Leben [NUMPIXELS]; 
 int lastPixel = NUMPIXELS -1;
 long randNumber1;
-long randNumber2;
 
-long randNumber3;
-long randNumber4;
-long randNumber5;
-long randNumber6;
-long randNumber7;
-long randNumber8;
-long randNumber9;
 
 
 
 void setup() {
     randomSeed(analogRead(0));
-    randNumber1 = random(NUMPIXELS);
+  for(int i=0;i<NUMPIXELS;i++){
+    randNumber1 = random(2);
 
-    Pixels[randNumber1] = 1;
+    Pixels[i] = randNumber1;
+  }
 
-    
-    
 /*
    Pixels[4] = 1;
    Pixels[5] = 1;
@@ -64,7 +56,6 @@ void setup() {
    Pixels[31] = 1;
    */
   Serial.begin(9600);
-  //pinMode(PIN, OUTPUT);
   pixels.begin();
 };
 
@@ -415,14 +406,16 @@ if (lebendePixel == 0){
 software_Reset();
 }
 }//schließt den loop
+
+
+
+
+
  void software_Reset() 
 {
 asm volatile ("  jmp 0");  
 }  
 
-
-  
-  
 
 
 
