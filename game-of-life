@@ -13,9 +13,40 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 int Pixels [NUMPIXELS];
 int Leben [NUMPIXELS]; 
 int lastPixel = NUMPIXELS -1;
+long randNumber1;
+long randNumber2;
+long randNumber3;
+long randNumber4;
+long randNumber5;
+long randNumber6;
+long randNumber7;
+long randNumber8;
+long randNumber9;
+
 
 void setup() {
-
+    randomSeed(analogRead(0));
+    randNumber1 = random(NUMPIXELS);
+    randNumber2 = random(NUMPIXELS);
+    randNumber3 = random(NUMPIXELS);
+    randNumber4 = random(NUMPIXELS);
+    randNumber5 = random(NUMPIXELS);
+    randNumber6 = random(NUMPIXELS);
+    randNumber7 = random(NUMPIXELS);
+    randNumber8 = random(NUMPIXELS);
+    randNumber9 = random(NUMPIXELS);
+    
+    Pixels[randNumber1] = 1;
+    Pixels[randNumber2] = 1;
+    Pixels[randNumber3] = 1;
+    Pixels[randNumber4] = 1;
+    Pixels[randNumber5] = 1;
+    Pixels[randNumber6] = 1;
+    Pixels[randNumber7] = 1;
+    Pixels[randNumber8] = 1;
+    Pixels[randNumber9] = 1;
+    
+/*
    Pixels[4] = 1;
    Pixels[5] = 1;
    Pixels[6] = 1;
@@ -28,6 +59,7 @@ void setup() {
    Pixels[37] = 1;
    Pixels[38] = 1;
    Pixels[36] = 1;
+   */
   /*
 
   Pixels[11] = 1;
@@ -384,7 +416,18 @@ void loop() {
   }//schließt for(int 
   pixels.show();
   delay (100);
+  
+  
+  
+  if (allPixels == 0){
+   software_Reset(); 
+  }
 
 }//schließt den loop
+
+void software_Reset() 
+{
+asm volatile ("  jmp 0");  
+}  
 
 
