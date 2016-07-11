@@ -1,18 +1,37 @@
+
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
 #ifdef __AVR__
 #endif
 #define PIN            6
-#define NUMPIXELS      40
+#define Height         8  //Höhe des Spielfeldes 
+#define Width          8  //Breite des Spielfeldes 
+#define NUMPIXELS      Width * Height//Anzahl aller Pixel
+
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
-int delayval = 100; 
-int Pixels [40];
-int Leben [40];
+int Pixels [NUMPIXELS];
+int Leben [NUMPIXELS]; 
+int Muster [NUMPIXELS];
+int lastPixel = NUMPIXELS -1;
+long randNumber1;
+
+
+
 
 void setup() {
   
- Pixels[4] = 1;
+    randomSeed(analogRead(0));
+  for(int r=0;r<NUMPIXELS;r++){
+    randNumber1 = random(2);
+
+    Pixels[r] = randNumber1;
+  }
+    
+   
+
+/*
+   Pixels[4] = 1;
    Pixels[5] = 1;
    Pixels[6] = 1;
    Pixels[11] = 1;
@@ -24,22 +43,23 @@ void setup() {
    Pixels[37] = 1;
    Pixels[38] = 1;
    Pixels[36] = 1;
-  
+   */
+
 /*
-  Pixels[11] = 1;
+  Pixels[35] = 1;
   Pixels[19] = 1;
   Pixels[27] = 1;
-  Pixels[18] = 1;
-  Pixels[20] = 1;
- */
+  Pixels[26] = 1;
+  Pixels[28] = 1;
+  */
 
-  /* 
+    
+     /*
    Pixels[15] = 1;
    Pixels[23] = 1;
    Pixels[31] = 1;
    */
   Serial.begin(9600);
-  pinMode(PIN, OUTPUT);
   pixels.begin();
 };
 
@@ -48,7 +68,7 @@ void setup() {
 
 int Nachbar(int n){
   int Nachbar = 0;
-  if (n == 32){ //öffnet if Ecke links unten
+  if (n == NUMPIXELS - Width){ //öffnet if Ecke links unten
     if (Pixels[n - 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -69,7 +89,7 @@ int Nachbar(int n){
 
 
 
-  if (n == 39){ //öffnet if Ecke rechts unten
+  if (n == lastPixel){ //öffnet if Ecke rechts unten
     if (Pixels[n - 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -92,7 +112,7 @@ int Nachbar(int n){
   
   
   
-  if (n == 7){ //öffnet if Ecke rechts oben
+  if (n == 0 + Width - 1){ //öffnet if Ecke rechts oben
     if (Pixels[n + 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -140,8 +160,9 @@ int Nachbar(int n){
   
   
   
-  if ((32<n)&&(n<39)){ //öffnet if untere Reihe  
-    if (Pixels[n + 1] == 1){
+  //if ((32<n)&&(n<39)){ //öffnet if untere Reihe  
+  if ((NUMPIXELS - Width<n)&&(n<lastPixel)){
+  if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
       //Serial.println(". Zelle. Rechts. ");
@@ -174,7 +195,7 @@ int Nachbar(int n){
   
   
   
-  if ((0<n)&&(n<7)){ //öffnet if obere Reihe 
+  if ((0<n)&&(n<0+Width-1)){ //öffnet if obere Reihe 
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -208,8 +229,8 @@ int Nachbar(int n){
   
   
   
-  //if (n % 8 == 0){ //öffnet if links
-  if ((n== 8)||(n==16)||(n==24)){
+  if (n % 8 == 0){ //öffnet if links
+  //if ((n== 8)||(n==16)||(n==24)){
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -244,8 +265,8 @@ int Nachbar(int n){
   
   
   
-  //if (n % 8 == 7){ //öffnet if rechts
-  if ((n==15)||(n==23)||(n==31)){
+  if (n % 8 == 7){ //öffnet if rechts
+  //if ((n==15)||(n==23)||(n==31)){
     if (Pixels[n - 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -331,54 +352,82 @@ int Nachbar(int n){
 
 
 void loop() {
-
+  int lebendePixel = 0;
+  
+  
   for(int i=0;i<NUMPIXELS;i++){
+//for(int r=0;r<NUMPIXELS;r++){
+  
+  
     if (Pixels[i] == 0){ 
-      pixels.setPixelColor(i, pixels.Color(1,0,0));
+      pixels.setPixelColor(i, pixels.Color(10,3,0));
     }//schließt if 
     if (Pixels[i] == 1 ){
-      pixels.setPixelColor(i, pixels.Color(0,0,5)); 
+           lebendePixel = lebendePixel + 1;
+      pixels.setPixelColor(i, pixels.Color(0,0,15)); 
     }//schließt if
-    
     
     
     int anzahlLebenderPixel; 
     anzahlLebenderPixel = Nachbar(i);
-    
-    
-    
+
+
+
     if ((anzahlLebenderPixel < 2)|| (anzahlLebenderPixel > 3)){
       //Pixels[i] = 0;
-      Leben[i] = 0;
+       Leben[i] = 0; 
+   //   Muster[r] = 0;
     }//schließt if 
     if (anzahlLebenderPixel == 3){
       //Pixels[i] = 1;
-      Leben[i] = 1;
+      Leben[i] = 1; 
+  //  Muster[r]++;
     }//schließt if 
     if (anzahlLebenderPixel == 2){
       //Pixels[i] = 1;
       Leben[i] = 2;
-    }//schließt if 
-  }//schließt for(int 
+    //  Muster[r]++;
+    }//schließt if
+    
+    
+    
+/*if ((Muster[r] == 12) && (Muster[r > 0] == 0) ||(Muster[r>0] == 12)) {
+delay (1000);
+software_Reset();
+        }
+  Serial.println (Muster[r]);      
+  */      
+//  }
   
   
-  
-  
+  }//schließt for(int
   
   for(int i=0;i<NUMPIXELS;i++){
+
     if (Leben[i] == 0){
       Pixels[i] = 0; 
+
     }
     if (Leben[i] == 1){
       Pixels[i] = 1;
-    } 
-    if (Leben[i] == 2){
 
     } 
-  }//schließt for(int 
+    if (Leben[i] == 2){    
+
+    }
+    
+      }  //schließt for(int 
+
   pixels.show();
-  delay (100);
+  delay (0);
+
+
+
+
+if (lebendePixel == 0){
+  delay (1000);
+software_Reset();
+}
 
 }//schließt den loop
-
 
