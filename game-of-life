@@ -12,7 +12,7 @@
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 int Pixels [NUMPIXELS];
 int Leben [NUMPIXELS]; 
-int Muster [NUMPIXELS];
+int schritte;
 int lastPixel = NUMPIXELS -1;
 long randNumber1;
 
@@ -24,8 +24,9 @@ void setup() {
     randomSeed(analogRead(0));
   for(int r=0;r<NUMPIXELS;r++){
     randNumber1 = random(2);
+     Pixels[r] = randNumber1;
 
-    Pixels[r] = randNumber1;
+
   }
     
    
@@ -61,8 +62,8 @@ void setup() {
    */
   Serial.begin(9600);
   pixels.begin();
-};
 
+};
 
 
 
@@ -351,19 +352,62 @@ int Nachbar(int n){
 
 
 
+
+
+
+
+int veraenderungen (int v){
+       int veraenderungen =  veraenderungen;
+    if (Pixels[v] == Leben[v]){
+  veraenderungen++; 
+
+    } 
+    else{
+
+      veraenderungen = 0;
+    } 
+
+    return veraenderungen;
+}
+
+
+
+int veraenderungen2 (int v){
+         int veraenderungen2 = veraenderungen2;        
+    if (Pixels[v] == Leben[v]){
+
+ veraenderungen2 = 0;
+    } 
+    else{
+
+    veraenderungen2++;        
+    } 
+
+
+
+        return veraenderungen2;
+}
+
+
+
+
+
+
+
 void loop() {
+        
+
   int lebendePixel = 0;
-  
-  
-  for(int i=0;i<NUMPIXELS;i++){
-//for(int r=0;r<NUMPIXELS;r++){
-  
-  
+
+
+    for(int i=0;i<NUMPIXELS;i++){
     if (Pixels[i] == 0){ 
       pixels.setPixelColor(i, pixels.Color(10,3,0));
+          // Muster[i] = 0; 
     }//schließt if 
     if (Pixels[i] == 1 ){
-           lebendePixel = lebendePixel + 1;
+           lebendePixel = lebendePixel + 1;     
+           //Muster[i]++;
       pixels.setPixelColor(i, pixels.Color(0,0,15)); 
     }//schließt if
     
@@ -374,35 +418,31 @@ void loop() {
 
 
     if ((anzahlLebenderPixel < 2)|| (anzahlLebenderPixel > 3)){
+
+              veraenderungen(i);
+  
       //Pixels[i] = 0;
        Leben[i] = 0; 
-   //   Muster[r] = 0;
+
     }//schließt if 
     if (anzahlLebenderPixel == 3){
       //Pixels[i] = 1;
       Leben[i] = 1; 
-  //  Muster[r]++;
+      
     }//schließt if 
     if (anzahlLebenderPixel == 2){
       //Pixels[i] = 1;
       Leben[i] = 2;
-    //  Muster[r]++;
+
     }//schließt if
-    
-    
-    
-/*if ((Muster[r] == 12) && (Muster[r > 0] == 0) ||(Muster[r>0] == 12)) {
-delay (1000);
-software_Reset();
-        }
-  Serial.println (Muster[r]);      
-  */      
-//  }
-  
-  
+
+
   }//schließt for(int
   
   for(int i=0;i<NUMPIXELS;i++){
+    
+
+    veraenderungen2(i);
 
     if (Leben[i] == 0){
       Pixels[i] = 0; 
@@ -415,19 +455,39 @@ software_Reset();
     if (Leben[i] == 2){    
 
     }
-    
-      }  //schließt for(int 
+ }  //schließt for(int 
+      
+
+
+
 
   pixels.show();
   delay (0);
-
-
-
 
 if (lebendePixel == 0){
   delay (1000);
 software_Reset();
 }
 
+
+ if (veraenderungen == veraenderungen2){
+  schritte++; 
+  
+}
+if (schritte == 6){
+   delay (1000);
+software_Reset();
+}   
+
+
+    Serial.print (schritte);
 }//schließt den loop
+
+
+
+ void software_Reset() 
+{
+asm volatile ("  jmp 0");  
+}  
+
 
