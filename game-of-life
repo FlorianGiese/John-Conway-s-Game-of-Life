@@ -401,7 +401,6 @@ void loop() {
 
   int lebendePixel = 0;
 
-
   for(int i=0;i<NUMPIXELS;i++){
     if (Pixels[i] == 0){ 
       pixels.setPixelColor(i, pixels.Color(10,3,0));
@@ -421,8 +420,8 @@ void loop() {
 
     if ((anzahlLebenderPixel < 2)|| (anzahlLebenderPixel > 3)){
       if (Pixels[i] == Leben[i]){
-
         veraenderungen = 0;
+
       } 
       else{
         veraenderungen++; 
@@ -433,6 +432,8 @@ void loop() {
       Leben[i] = 0; 
 
     }//schließt if 
+    
+    
     if (anzahlLebenderPixel == 3){
       //Pixels[i] = 1;
       Leben[i] = 1; 
@@ -440,60 +441,37 @@ void loop() {
     }//schließt if 
     if (anzahlLebenderPixel == 2){
       //Pixels[i] = 1;
-      Leben[i] = 2;
-
+      //Leben[i] = 1;
     }//schließt if
-
 
   }//schließt for(int
 
+
+
   for(int i=0;i<NUMPIXELS;i++){
-
-    if (Pixels[i] == Leben[i]){
-
-      veraenderungen2++;     
-
-    } 
-    else{
-      veraenderungen2 = 0;
-    } 
-
-    if (Leben[i] == 0){
-      Pixels[i] = 0; 
-
-    }
-    if (Leben[i] == 1){
-      Pixels[i] = 1;
-
-    } 
-    if (Leben[i] == 2){    
-
-    }
-  }  //schließt for(int 
-
-
-
+    Pixels[i] = Leben[i];
+  }
 
 
   pixels.show();
-  delay (100);
-
-  if (lebendePixel == 0){
-    delay (1000);
-    software_Reset();
-  }
-
-
-  if ((veraenderungen == 0) && (veraenderungen == 0)){
-    schritte++; 
-
-  }
-  if (schritte == 50){
-    delay (1000);
-    software_Reset();
-  }   
-
-
+   delay (100);
+   
+   if (lebendePixel == 0){
+   delay (1000);
+   software_Reset();
+   }
+   
+   
+   if (veraenderungen == 0){
+   schritte++; 
+   
+   }
+   if (schritte == 50){
+   delay (1000);
+   software_Reset();
+   }   
+   
+   
 }//schließt den loop
 
 
@@ -502,8 +480,3 @@ void software_Reset()
 {
   asm volatile ("  jmp 0");  
 }  
-
-
-
-
-
