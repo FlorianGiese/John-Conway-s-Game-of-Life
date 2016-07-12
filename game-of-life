@@ -1,3 +1,4 @@
+
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
 #ifdef __AVR__
@@ -15,24 +16,24 @@ int schritte;
 int veraenderungen;
 int veraenderungen2;
 int lastPixel = NUMPIXELS -1;
-long randNumber1;
+int randNumber1;
 
 
 
 
 void setup() {
-  
-    randomSeed(analogRead(0));
+
+  randomSeed(analogRead(0));
   for(int r=0;r<NUMPIXELS;r++){
-    randNumber1 = random(2);
-     Pixels[r] = randNumber1;
+    Pixels[r]  = random(2);
+
 
 
   }
-    
-   
 
-/*
+
+
+  /*
    Pixels[4] = 1;
    Pixels[5] = 1;
    Pixels[6] = 1;
@@ -47,16 +48,16 @@ void setup() {
    Pixels[36] = 1;
    */
 
-/*
+  /*
   Pixels[35] = 1;
-  Pixels[19] = 1;
-  Pixels[27] = 1;
-  Pixels[26] = 1;
-  Pixels[28] = 1;
-  */
+   Pixels[19] = 1;
+   Pixels[27] = 1;
+   Pixels[26] = 1;
+   Pixels[28] = 1;
+   */
 
-    
-     /*
+
+  /*
    Pixels[15] = 1;
    Pixels[23] = 1;
    Pixels[31] = 1;
@@ -109,11 +110,11 @@ int Nachbar(int n){
     }//schließt if  
     return Nachbar;
   }//schließt Ecke rechts unten
-  
-  
-  
-  
-  
+
+
+
+
+
   if (n == 0 + Width - 1){ //öffnet if Ecke rechts oben
     if (Pixels[n + 8] == 1){
       Nachbar = Nachbar + 1;
@@ -132,12 +133,12 @@ int Nachbar(int n){
     }//schließt if  
     return Nachbar;
   }//schließt Ecke rechts oben
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   if (n == 0){ //öffnet if Ecke links oben
     if (Pixels[n + 8] == 1){
       Nachbar = Nachbar + 1;
@@ -156,15 +157,15 @@ int Nachbar(int n){
     }//schließt if  
     return Nachbar;
   }//schließt Ecke links oben
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   //if ((32<n)&&(n<39)){ //öffnet if untere Reihe  
   if ((NUMPIXELS - Width<n)&&(n<lastPixel)){
-  if (Pixels[n + 1] == 1){
+    if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
       //Serial.println(". Zelle. Rechts. ");
@@ -191,12 +192,12 @@ int Nachbar(int n){
     }//schließt if 
     return Nachbar;
   }//schließt if untere Reihe
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   if ((0<n)&&(n<0+Width-1)){ //öffnet if obere Reihe 
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
@@ -225,14 +226,14 @@ int Nachbar(int n){
     }//schließt if 
     return Nachbar;
   }//schließt if obere Reihe
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   if (n % 8 == 0){ //öffnet if links
-  //if ((n== 8)||(n==16)||(n==24)){
+    //if ((n== 8)||(n==16)||(n==24)){
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -260,15 +261,15 @@ int Nachbar(int n){
     }//schließt if 
     return Nachbar; 
   }//schließt if links
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   if (n % 8 == 7){ //öffnet if rechts
-  //if ((n==15)||(n==23)||(n==31)){
+    //if ((n==15)||(n==23)||(n==31)){
     if (Pixels[n - 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -296,13 +297,13 @@ int Nachbar(int n){
     }//schließt if 
     return Nachbar; 
   }//schließt if rechts
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   if (Pixels[n + 1] == 1){
     Nachbar = Nachbar + 1;
     //Serial.print(n);
@@ -357,85 +358,85 @@ int Nachbar(int n){
 
 /*
 
-int veraenderungen (int i){
-       int veraenderungen =  veraenderungen;
-    if (Pixels[i] == Leben[i]){
-  veraenderungen++; 
-
-    } 
-    else{
-
-      veraenderungen = 0;
-    } 
-
-    return veraenderungen;
-}
-
-
-
-int veraenderungen2 (int i){
-         int veraenderungen2 = veraenderungen2;        
-    if (Pixels[i] == Leben[i]){
-
+ int veraenderungen (int i){
+ int veraenderungen =  veraenderungen;
+ if (Pixels[i] == Leben[i]){
+ veraenderungen++; 
+ 
+ } 
+ else{
+ 
+ veraenderungen = 0;
+ } 
+ 
+ return veraenderungen;
+ }
+ 
+ 
+ 
+ int veraenderungen2 (int i){
+ int veraenderungen2 = veraenderungen2;        
+ if (Pixels[i] == Leben[i]){
+ 
  veraenderungen2 = 0;
-    } 
-    else{
-
-    veraenderungen2++;        
-    } 
-
-
-
-        return veraenderungen2;
-}
-
-
-*/
+ } 
+ else{
+ 
+ veraenderungen2++;        
+ } 
+ 
+ 
+ 
+ return veraenderungen2;
+ }
+ 
+ 
+ */
 
 
 
 
 void loop() {
-        
+
 
   int lebendePixel = 0;
 
 
-    for(int i=0;i<NUMPIXELS;i++){
+  for(int i=0;i<NUMPIXELS;i++){
     if (Pixels[i] == 0){ 
       pixels.setPixelColor(i, pixels.Color(10,3,0));
-          // Muster[i] = 0; 
+      // Muster[i] = 0; 
     }//schließt if 
     if (Pixels[i] == 1 ){
-           lebendePixel = lebendePixel + 1;     
-           //Muster[i]++;
+      lebendePixel = lebendePixel + 1;     
+      //Muster[i]++;
       pixels.setPixelColor(i, pixels.Color(0,0,15)); 
     }//schließt if
-    
-    
+
+
     int anzahlLebenderPixel; 
     anzahlLebenderPixel = Nachbar(i);
 
 
 
     if ((anzahlLebenderPixel < 2)|| (anzahlLebenderPixel > 3)){
-       if (Pixels[i] == Leben[i]){
+      if (Pixels[i] == Leben[i]){
 
-      veraenderungen = 0;
-    } 
-    else{
-  veraenderungen++; 
+        veraenderungen = 0;
+      } 
+      else{
+        veraenderungen++; 
 
-    } 
+      } 
 
       //Pixels[i] = 0;
-       Leben[i] = 0; 
+      Leben[i] = 0; 
 
     }//schließt if 
     if (anzahlLebenderPixel == 3){
       //Pixels[i] = 1;
       Leben[i] = 1; 
-      
+
     }//schließt if 
     if (anzahlLebenderPixel == 2){
       //Pixels[i] = 1;
@@ -445,16 +446,16 @@ void loop() {
 
 
   }//schließt for(int
-  
+
   for(int i=0;i<NUMPIXELS;i++){
-    
+
     if (Pixels[i] == Leben[i]){
 
-    veraenderungen2++;     
+      veraenderungen2++;     
 
     } 
     else{
-    veraenderungen2 = 0;
+      veraenderungen2 = 0;
     } 
 
     if (Leben[i] == 0){
@@ -468,8 +469,8 @@ void loop() {
     if (Leben[i] == 2){    
 
     }
- }  //schließt for(int 
-      
+  }  //schließt for(int 
+
 
 
 
@@ -477,39 +478,31 @@ void loop() {
   pixels.show();
   delay (0);
 
-if (lebendePixel == 0){
-  delay (1000);
-software_Reset();
-}
+  if (lebendePixel == 0){
+    delay (1000);
+    software_Reset();
+  }
 
 
- if ((veraenderungen == 0) && (veraenderungen == 0)){
-  schritte++; 
-  
-}
-if (schritte == 50){
-   delay (1000);
-software_Reset();
-}   
+  if ((veraenderungen == 0) && (veraenderungen == 0)){
+    schritte++; 
+
+  }
+  if (schritte == 50){
+    delay (1000);
+    software_Reset();
+  }   
 
 
-    Serial.println (veraenderungen);
+  Serial.println (veraenderungen);
 }//schließt den loop
 
 
 
- void software_Reset() 
+void software_Reset() 
 {
-asm volatile ("  jmp 0");  
+  asm volatile ("  jmp 0");  
 }  
-
-
-
-
-
-
-  
-  
 
 
 
