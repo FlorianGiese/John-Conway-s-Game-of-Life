@@ -4,9 +4,9 @@
 #ifdef __AVR__
 #endif
 #define PIN            6
-#define Height         8  //Höhe des Spielfeldes 
-#define Width          8  //Breite des Spielfeldes 
-#define NUMPIXELS      Width * Height//Anzahl aller Pixel
+#define HEIGHT         8  //Höhe des Spielfeldes 
+#define WIDTH          8  //Breite des Spielfeldes 
+#define NUMPIXELS      WIDTH * HEIGHT//Anzahl aller Pixel
 
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
@@ -71,7 +71,7 @@ void setup() {
 
 int Nachbar(int n){
   int Nachbar = 0;
-  if (n == NUMPIXELS - Width){ //öffnet if Ecke links unten
+  if (n == NUMPIXELS - WIDTH ){ //öffnet if Ecke links unten
     if (Pixels[n - 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -115,7 +115,7 @@ int Nachbar(int n){
 
 
 
-  if (n == 0 + Width - 1){ //öffnet if Ecke rechts oben
+  if (n == 0 + WIDTH  - 1){ //öffnet if Ecke rechts oben
     if (Pixels[n + 8] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -164,7 +164,7 @@ int Nachbar(int n){
 
 
   //if ((32<n)&&(n<39)){ //öffnet if untere Reihe  
-  if ((NUMPIXELS - Width<n)&&(n<lastPixel)){
+  if ((NUMPIXELS - WIDTH <n)&&(n<lastPixel)){
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -198,7 +198,7 @@ int Nachbar(int n){
 
 
 
-  if ((0<n)&&(n<0+Width-1)){ //öffnet if obere Reihe 
+  if ((0<n)&&(n<0+WIDTH -1)){ //öffnet if obere Reihe 
     if (Pixels[n + 1] == 1){
       Nachbar = Nachbar + 1;
       //Serial.print(n);
@@ -476,7 +476,7 @@ void loop() {
 
 
   pixels.show();
-  delay (0);
+  delay (100);
 
   if (lebendePixel == 0){
     delay (1000);
@@ -494,7 +494,6 @@ void loop() {
   }   
 
 
-  Serial.println (veraenderungen);
 }//schließt den loop
 
 
@@ -503,6 +502,7 @@ void software_Reset()
 {
   asm volatile ("  jmp 0");  
 }  
+
 
 
 
