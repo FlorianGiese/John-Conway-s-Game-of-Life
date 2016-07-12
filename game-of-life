@@ -1,4 +1,3 @@
-
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
 #ifdef __AVR__
@@ -13,6 +12,8 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ80
 int Pixels [NUMPIXELS];
 int Leben [NUMPIXELS]; 
 int schritte;
+int veraenderungen;
+int veraenderungen2;
 int lastPixel = NUMPIXELS -1;
 long randNumber1;
 
@@ -354,11 +355,11 @@ int Nachbar(int n){
 
 
 
+/*
 
-
-int veraenderungen (int v){
+int veraenderungen (int i){
        int veraenderungen =  veraenderungen;
-    if (Pixels[v] == Leben[v]){
+    if (Pixels[i] == Leben[i]){
   veraenderungen++; 
 
     } 
@@ -372,9 +373,9 @@ int veraenderungen (int v){
 
 
 
-int veraenderungen2 (int v){
+int veraenderungen2 (int i){
          int veraenderungen2 = veraenderungen2;        
-    if (Pixels[v] == Leben[v]){
+    if (Pixels[i] == Leben[i]){
 
  veraenderungen2 = 0;
     } 
@@ -389,7 +390,7 @@ int veraenderungen2 (int v){
 }
 
 
-
+*/
 
 
 
@@ -418,9 +419,15 @@ void loop() {
 
 
     if ((anzahlLebenderPixel < 2)|| (anzahlLebenderPixel > 3)){
+       if (Pixels[i] == Leben[i]){
 
-              veraenderungen(i);
-  
+      veraenderungen = 0;
+    } 
+    else{
+  veraenderungen++; 
+
+    } 
+
       //Pixels[i] = 0;
        Leben[i] = 0; 
 
@@ -441,8 +448,14 @@ void loop() {
   
   for(int i=0;i<NUMPIXELS;i++){
     
+    if (Pixels[i] == Leben[i]){
 
-    veraenderungen2(i);
+    veraenderungen2++;     
+
+    } 
+    else{
+    veraenderungen2 = 0;
+    } 
 
     if (Leben[i] == 0){
       Pixels[i] = 0; 
@@ -470,17 +483,17 @@ software_Reset();
 }
 
 
- if (veraenderungen == veraenderungen2){
+ if ((veraenderungen == 0) && (veraenderungen == 0)){
   schritte++; 
   
 }
-if (schritte == 6){
+if (schritte == 50){
    delay (1000);
 software_Reset();
 }   
 
 
-    Serial.print (schritte);
+    Serial.println (veraenderungen);
 }//schließt den loop
 
 
@@ -489,5 +502,15 @@ software_Reset();
 {
 asm volatile ("  jmp 0");  
 }  
+
+
+
+
+
+
+  
+  
+
+
 
 
