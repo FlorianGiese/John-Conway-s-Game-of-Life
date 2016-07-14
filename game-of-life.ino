@@ -43,13 +43,13 @@ void setup() {
   pixels.begin();
 };
 
+
 void loop() {
 
   showStripe();
   gameoflife();
   veraenderungen = ermittleVeraenderungen();
   syncSteps();
-
 
   if (veraenderungen == veraenderungen2) {
     schritte++;
@@ -64,37 +64,7 @@ void loop() {
   veraenderungen2 = veraenderungen;
   Serial.println(schritte);
   delay(127);
-  /*
-
-
-
-    delay (100);
-
-    if (lebendePixel == 0) {
-      delay (1000);
-      software_Reset();
-    }
-
-  */
-  //
-
-  /*
-    if (veraenderungen == veraenderungen2) {
-      schritte++;
-    }
-    // Serial.println(schritte);
-    //     Serial.print(veraenderungen);
-
-    veraenderungen2 = veraenderungen;
-
-
-    if (schritte == 50) {
-      software_Reset();
-    }
-  */
-}//schließt den loop
-
-
+}
 
 
 // fuerht zur anzeige als LED matrix von Pixels[]
@@ -122,7 +92,6 @@ void gameoflife() {
       Leben[i] = 1;
     }
   }
-
 }
 
 
@@ -136,17 +105,11 @@ void syncSteps() {
 int ermittleVeraenderungen() {
   int veraenderungen = 0;
 
-
-
   for (int i = 0; i < NUMPIXELS; i++) {
     if (Leben[i] != Pixels[i]) {
       veraenderungen = veraenderungen + 1;
     }
   }
-
-
-
-
   return veraenderungen;
 }
 
@@ -156,300 +119,167 @@ void software_Reset()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//sorgt fuer die Ränder
 int Nachbar(int n) {
   int Nachbar = 0;
-  if (n == NUMPIXELS - WIDTH ) { //öffnet if Ecke links unten
+  //öffnet if Ecke links unten
+  if (n == NUMPIXELS - WIDTH ) { 
     if (Pixels[n - 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. oben. ");
-    }//schließt if
+    }
     if (Pixels[n - 7] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. rechts oben. ");
-    }//schließt if
+    }
     if (Pixels[n + 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. Rechts. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt Ecke links unten
-
-
-
-  if (n == lastPixel) { //öffnet if Ecke rechts unten
+  }
+  
+//öffnet if Ecke rechts unten
+  if (n == lastPixel) { 
     if (Pixels[n - 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. oben. ");
-    }//schließt if
+    }
     if (Pixels[n - 9] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links oben. ");
-    }//schließt if
+    }
     if (Pixels[n - 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt Ecke rechts unten
-
-
-
-
-
-  if (n == 0 + WIDTH  - 1) { //öffnet if Ecke rechts oben
+  }
+  
+//öffnet if Ecke rechts oben
+  if (n == 0 + WIDTH  - 1) { 
     if (Pixels[n + 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. unten. ");
-    }//schließt if
+    }
     if (Pixels[n + 7 ] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links unten. ");
-    }//schließt if
+    }
     if (Pixels[n - 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt Ecke rechts oben
+  }
 
-
-
-
-
-
-  if (n == 0) { //öffnet if Ecke links oben
+//öffnet if Ecke links oben
+  if (n == 0) {
     if (Pixels[n + 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. unten. ");
-    }//schließt if
+    }
     if (Pixels[n + 9] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. rechts unten. ");
-    }//schließt if
+    }
     if (Pixels[n + 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. rechts. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt Ecke links oben
+  }
 
-
-
-
-
-
-  //if ((32<n)&&(n<39)){ //öffnet if untere Reihe
+//öffnet if untere Reihe
   if ((NUMPIXELS - WIDTH < n) && (n < lastPixel)) {
     if (Pixels[n + 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. Rechts. ");
-    }//schließt if
+    }
     if (Pixels[n - 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. Links. ");
-    }//schließt else
+    }
     if (Pixels[n - 7] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. rechts oben. ");
-    }//schließt if
+    }
     if (Pixels[n - 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. oben. ");
-    }//schließt if
+    }
     if (Pixels[n - 9] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links oben. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt if untere Reihe
+  }
 
-
-
-
-
-
-  if ((0 < n) && (n < 0 + WIDTH - 1)) { //öffnet if obere Reihe
+//öffnet if obere Reihe
+  if ((0 < n) && (n < 0 + WIDTH - 1)) { 
     if (Pixels[n + 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. Rechts. ");
-    }//schließt if
+    }
     if (Pixels[n - 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. Links. ");
-    }//schließt else
+    }
     if (Pixels[n + 7] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links unten. ");
-    }//schließt if
+    }
     if (Pixels[n + 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. unten. ");
-    }//schließt if
+    }
     if (Pixels[n + 9] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. rechts unten. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt if obere Reihe
+  }
 
-
-
-
-
-
-  if (n % 8 == 0) { //öffnet if links
-    //if ((n== 8)||(n==16)||(n==24)){
+//öffnet if links
+  if (n % 8 == 0) { 
     if (Pixels[n + 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. Rechts. ");
-    }//schließt if
+    }
     if (Pixels[n - 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. oben. ");
-    }//schließt else
+    }
     if (Pixels[n - 7] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. rechts oben. ");
-    }//schließt if
+    }
     if (Pixels[n + 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. unten. ");
-    }//schließt if
+    }
     if (Pixels[n + 9] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. rechts unten. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt if links
-
-
-
-
-
-
-
-  if (n % 8 == 7) { //öffnet if rechts
-    //if ((n==15)||(n==23)||(n==31)){
+  }
+ //öffnet if rechts
+  if (n % 8 == 7) {
     if (Pixels[n - 1] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links. ");
-    }//schließt if
+    }
     if (Pixels[n + 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. unten. ");
-    }//schließt else
+    }
     if (Pixels[n + 7] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links unten. ");
-    }//schließt if
+    }
     if (Pixels[n - 8] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. oben. ");
-    }//schließt if
+    }
     if (Pixels[n - 9] == 1) {
       Nachbar = Nachbar + 1;
-      //Serial.print(n);
-      //Serial.println(". Zelle. links oben. ");
-    }//schließt if
+    }
     return Nachbar;
-  }//schließt if rechts
-
-
-
-
-
-
+  }
 
   if (Pixels[n + 1] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. Rechts. ");
-  }//schließt if
+  }
   if (Pixels[n - 1] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. Links. ");
-  }//schließt else
+  }
   if (Pixels[n + 7] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. links unten. ");
-  }//schließt if
+  }
   if (Pixels[n + 8] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. unten. ");
-  }//schließt if
+  }
   if (Pixels[n + 9] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. rechts unten. ");
-  }//schließt if
+  }
   if (Pixels[n - 7] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. rechts oben. ");
-  }//schließt if
+  }
   if (Pixels[n - 8] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. oben. ");
-  }//schließt if
+  }
   if (Pixels[n - 9] == 1) {
     Nachbar = Nachbar + 1;
-    //Serial.print(n);
-    //Serial.println(". Zelle. links oben. ");
-  }//schließt if
-  /*Serial.print(n);
-    Serial.print(". Zelle. Nachbarn am Leben: ");
-    Serial.println(Nachbar);
-  */
+  }
   return Nachbar;
-}//schließt int Nachbar
+}
