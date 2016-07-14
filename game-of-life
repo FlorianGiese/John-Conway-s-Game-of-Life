@@ -518,7 +518,6 @@ void loop() {
 
 
   if (schritte == 50){
-    delay (1000);
     software_Reset();
   }   
 
