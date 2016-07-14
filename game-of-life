@@ -29,8 +29,9 @@ void setup() {
 
 
   }
-  /*
 
+
+  /*
    
    Pixels[10] = 1;
    Pixels[18] = 1;
@@ -46,7 +47,7 @@ void setup() {
    Pixels[52] = 1;
    Pixels[57] = 1;
    Pixels[58] = 1;
-   */
+     */
   /*
    Pixels[4] = 1;
    Pixels[5] = 1;
@@ -456,24 +457,24 @@ void loop() {
       Leben[i] = 1; 
 
     }//schließt if 
-   /* if (anzahlLebenderPixel == 2){
+   if (anzahlLebenderPixel == 2){
       //Pixels[i] = 1;
       Leben[i] = 2;
     }//schließt if
 
-*/
+
   }//schließt for(int
 
 
   for(int i=0;i<NUMPIXELS;i++){
-   /* if (Leben[i] == 2){
+   if (Leben[i] == 2){
       Leben[i] = Pixels[i];
     }
-    */
+    
     if (Leben[i] != Pixels[i]){
-      Serial.print(Leben[i]);
-      Serial.print(" : ");
-      Serial.println(Pixels[i]);
+ //     Serial.print(Leben[i]);
+  //    Serial.print(" : ");
+   //   Serial.println(Pixels[i]);
       veraenderungen++;
     }
   }
@@ -487,11 +488,11 @@ void loop() {
       Pixels[i] = 1;
 
     } 
-  /*  if (Leben[i] == 2){
+  if (Leben[i] == 2){
       Leben[i] = Pixels[i];
 
     }
-*/
+
   }
 
 
@@ -529,6 +530,15 @@ void software_Reset()
 {
   asm volatile ("  jmp 0");  
 }  
+
+
+
+
+
+
+
+
+
 
 
 
