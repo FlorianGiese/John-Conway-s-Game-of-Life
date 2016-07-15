@@ -76,20 +76,20 @@ void loop() {
   
   sensor.requestTemperatures();
   Temperatures = sensor.getTempCByIndex(0);
-  int asdasd = 24;
-  String Temperaturen = String(asdasd, DEC);
+  Temp = Temperatures;
+ // String Temperaturen = String(asdasd, DEC);
   
   if (buttonState == HIGH) {
   matrix.fillScreen(0);
   matrix.setCursor(x, 0);
-  matrix.print(F(Temperaturen));
-  if(--x < -36) {
+  matrix.print(F("Game of Life"));
+  if(--x < -65) {
     x = matrix.width();
     if(++pass >= 3) pass = 0;
     matrix.setTextColor(colors[pass]);
   }
   matrix.show();
-  delay(100);
+  delay(30);
   } else {
   showStripe();
   gameoflife();
