@@ -1,24 +1,41 @@
 
 #include <Adafruit_NeoPixel.h>
 #include <avr/power.h>
-#ifdef __AVR__
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_NeoMatrix.h>
+#include <Adafruit_NeoPixel.h>
+#ifndef PSTR
+ #define PSTR
 #endif
+#define ONE_WIRE_BUS   2
 #define PIN            6
 #define HEIGHT         8  //Höhe des Spielfeldes 
 #define WIDTH          8  //Breite des Spielfeldes 
 #define NUMPIXELS      WIDTH * HEIGHT//Anzahl aller Pixel
+OneWire wire(ONE_WIRE_BUS);
+DallasTemperature sensor(&wire);
+
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 8, PIN,
+  NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
+  NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
+  NEO_GRB            + NEO_KHZ800);
+
+const uint16_t colors[] = {
+  matrix.Color(255, 0, 0), matrix.Color(0, 255, 0), matrix.Color(0, 0, 255) };
 
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 int Pixels [NUMPIXELS] =  {
   0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 1, 0, 0, 0, 0, 0,
-  0, 0, 1, 0, 0, 0, 0, 0,
-  0, 1, 1, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0,
-  1, 1, 0, 0, 1, 1, 1, 0,
-  1, 0, 1, 0, 1, 0, 0, 0,
-  0, 1, 1, 0, 0, 0, 0, 0
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0
 };
 
 int Leben [NUMPIXELS];
@@ -27,29 +44,59 @@ int veraenderungen = 0;
 int veraenderungen2 = 0;
 int lastPixel = NUMPIXELS - 1;
 int randNumber1;
-const int buttonPin = 2;
+int buttonPin = 3;
 int buttonState = 0;
-
-
+float Temperatures; 
+int Temp;
 void setup() {
 
   randomSeed(analogRead(0));
   for (int r = 0; r < NUMPIXELS; r++) {
       Pixels[r]  = random(2);
   }
-
   Serial.begin(9600);
-
+  Serial.println("Temperaturen:");
   pixels.begin();
+    pinMode(buttonPin, INPUT);
+      matrix.begin();
+  matrix.setTextWrap(false);
+  matrix.setBrightness(10);
+  matrix.setTextColor(colors[0]);
 };
+
+int x    = matrix.width();
+int pass = 0;
+
 
 
 void loop() {
-
+  
+  buttonState = digitalRead(buttonPin);  
+  
+  
+  sensor.requestTemperatures();
+  Temperatures = sensor.getTempCByIndex(0);
+  int asdasd = 24;
+  String Temperaturen = String(asdasd, DEC);
+  
+  if (buttonState == HIGH) {
+  matrix.fillScreen(0);
+  matrix.setCursor(x, 0);
+  matrix.print(F(Temperaturen));
+  if(--x < -36) {
+    x = matrix.width();
+    if(++pass >= 3) pass = 0;
+    matrix.setTextColor(colors[pass]);
+  }
+  matrix.show();
+  delay(100);
+  } else {
   showStripe();
   gameoflife();
   veraenderungen = ermittleVeraenderungen();
   syncSteps();
+
+
 
   if (veraenderungen == veraenderungen2) {
     schritte++;
@@ -62,22 +109,73 @@ void loop() {
     software_Reset();
   }
   veraenderungen2 = veraenderungen;
-  Serial.println(schritte);
+  
+  }
+  
+  
+    Serial.print(Temperatures); 
+   Serial.println(" Grad Celius");
   delay(127);
 }
 
 
 // fuerht zur anzeige als LED matrix von Pixels[]
 void showStripe() {
+  if (Temp <= 25){
   for (int i = 0; i < NUMPIXELS; i++) {
     if (Pixels[i] == 0) {
-      pixels.setPixelColor(i, pixels.Color(10, 3, 0));
+      pixels.setPixelColor(i, pixels.Color(0, 0, 10));
     }
     if (Pixels[i] == 1 ) {
-      pixels.setPixelColor(i, pixels.Color(0, 0, 15));
+      pixels.setPixelColor(i, pixels.Color(15, 10, 0));
     }
   }
   pixels.show();
+}
+  if (Temp == 26){
+  for (int i = 0; i < NUMPIXELS; i++) {
+    if (Pixels[i] == 0) {
+      pixels.setPixelColor(i, pixels.Color(5, 0, 10));
+    }
+    if (Pixels[i] == 1 ) {
+      pixels.setPixelColor(i, pixels.Color(15, 15, 3));
+    }
+  }
+  pixels.show();
+}
+  if (Temp == 27){
+  for (int i = 0; i < NUMPIXELS; i++) {
+    if (Pixels[i] == 0) {
+      pixels.setPixelColor(i, pixels.Color(10, 0, 10));
+    }
+    if (Pixels[i] == 1 ) {
+      pixels.setPixelColor(i, pixels.Color(13, 15 , 10));
+    }
+  }
+  pixels.show();
+}
+  if (Temp == 28){
+  for (int i = 0; i < NUMPIXELS; i++) {
+    if (Pixels[i] == 0) {
+      pixels.setPixelColor(i, pixels.Color(10, 0, 5));
+    }
+    if (Pixels[i] == 1 ) {
+      pixels.setPixelColor(i, pixels.Color(10, 15, 10));
+    }
+  }
+  pixels.show();
+}
+  if (Temp >= 29){
+  for (int i = 0; i < NUMPIXELS; i++) {
+    if (Pixels[i] == 0) {
+      pixels.setPixelColor(i, pixels.Color(10, 0, 0));
+    }
+    if (Pixels[i] == 1 ) {
+      pixels.setPixelColor(i, pixels.Color(0, 13, 10));
+    }
+  }
+  pixels.show();
+}
 }
 
 
@@ -257,6 +355,7 @@ int Nachbar(int n) {
     return Nachbar;
   }
 
+//öffnet restliches Spielfeld
   if (Pixels[n + 1] == 1) {
     Nachbar = Nachbar + 1;
   }
